@@ -8,18 +8,15 @@ public class CubesController : MonoBehaviour
 
     NavMeshAgent navMesh;
    
-    [SerializeField] private float destination;
+   
     Vector3 destPosition;
-    Vector3 startPosition;
-    [SerializeField] private float speed;
-    [SerializeField] private float stopDistance;
+    private float stopDistance;
+   
     // Start is called before the first frame update
     void Start()
     {
-        navMesh = GetComponent<NavMeshAgent>();
-        navMesh.speed = speed;
-        destPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z + destination);
-        startPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+       
+      
     }
 
     // Update is called once per frame
@@ -28,25 +25,26 @@ public class CubesController : MonoBehaviour
         Move();
     }
 
+    public void InitCubeSettings(float destination, float speed, float stopDist)
+    {
+        navMesh = GetComponent<NavMeshAgent>();
+        navMesh.speed = speed;
+        destPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z + destination);
+        stopDistance = stopDist;
+    }
     private void Move()
     {
         navMesh.SetDestination(destPosition);
         if (Vector3.Distance(transform.position, destPosition) < stopDistance)
         {
-            StopMove();
+         StopMove();
         }
     }
     void StopMove()
     {
         navMesh.isStopped = true;
-       // gameObject.SetActive(false);
-        StartCoroutine(RepeatMove());
+        gameObject.SetActive(false);
+       
     }
 
-    IEnumerator RepeatMove()
-    {
-        yield return new WaitForSeconds(1f);
-        gameObject.transform.position = startPosition;
-        navMesh.isStopped = false;
-    }
 }
