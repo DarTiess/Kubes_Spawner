@@ -4,51 +4,43 @@ using UnityEngine;
 
 public class CubesGenerator : MonoBehaviour
 {
-   public enum ParamType
-    {
-        Speed,
-        Distance,
-        Timer
-    }
+  
     [Header("Push Settings")]
     [SerializeField] private List<GameObject> cubesPrefabs;
     [SerializeField] private int listSize;
     private List<GameObject> cubesList = new List<GameObject>();
     int cubeIndex = 0;
     [SerializeField] private float generateTimer;
+    [HideInInspector] public float timerValue { get { return generateTimer; } }
     float timer = 0;
     [SerializeField] private float roadWidth;
     float roadPart;
-    [SerializeField] private float speedStep;
-    [SerializeField] private float distanceStep;
-    [SerializeField] private float timerStep;
+   
     [SerializeField] private Transform distanceLimit;
     float distLimit;
+    [HideInInspector] public float distLimitValue { get { return distLimit = Vector3.Distance(transform.position, distanceLimit.position); } }
+
+  
     [Header("Cube's Settings")]
     [SerializeField] private float destination;
+    [HideInInspector] public float distValue { get { return destination; } }
+
+
     [SerializeField] private float speed;
+   [HideInInspector]public float speedValue { get { return speed; } }
     [SerializeField] private float stopDistance;
     float rndXpos;
     int rndCube;
-   
-  
-    void Start()
-    {
 
+  
+
+    private void Start()
+    {
         roadPart = roadWidth / 2;
         distLimit = Vector3.Distance(transform.position, distanceLimit.position);
         InitializeCubesList(destination, speed, stopDistance);
-        CanvasController.Instance._SpeedMinus += SpeedMinus;
-        CanvasController.Instance._SpeedPlus += SpeedPlus;
-        CanvasController.Instance._DistancedPlus += DistancePlus;
-        CanvasController.Instance._DistanceMinus += DistanceMinus;
-        CanvasController.Instance._TimerMinus += TimerMinus;
-        CanvasController.Instance._TimerPlus += TimerPlus;
-
-        CanvasController.Instance.InitializeCanvas(speed,speedStep, destination,distanceStep, distLimit, generateTimer, timerStep);
     }
 
- 
 
     void Update()
     {
@@ -88,44 +80,18 @@ public class CubesGenerator : MonoBehaviour
         }
     }
  
-
-    void MinusParametr(ref float currentValue, float step)
+    public void ChangeSpeed(float value)
     {
-        currentValue -= step;
-    } 
-    void PlusParametr(ref float currentValue, float step)
-    {
-        currentValue += step;
+        speed = value;
     }
-    private void TimerPlus()
+    public void ChangeTimer(float value)
     {
-        PlusParametr(ref generateTimer, timerStep);
+        generateTimer = value;
     }
 
-    private void TimerMinus()
+    public void ChangeDistance(float value)
     {
-        MinusParametr(ref generateTimer, timerStep);
+        destination = value;
     }
-
-    private void DistanceMinus()
-    {
-        MinusParametr(ref destination, distanceStep);
-    }
-
-    private void DistancePlus()
-    {
-        PlusParametr(ref destination, distanceStep);
-    }
-
-    private void SpeedPlus()
-    {
-        PlusParametr(ref speed, speedStep);
-    }
-
-    private void SpeedMinus()
-    {
-        MinusParametr(ref speed, speedStep);
-    }
-
 
 }
