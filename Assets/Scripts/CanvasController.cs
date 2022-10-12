@@ -31,9 +31,9 @@ public class CanvasController : MonoBehaviour
         distance = cubesGenerator.distValue;
         timer = cubesGenerator.timerValue;
         distanceLimit = cubesGenerator.distLimitValue;
-        Debug.Log(distanceLimit);
+       
         speedInput.text = speed.ToString();
-        speedInput.onEndEdit.AddListener(ChangeSpeed); 
+        speedInput.onEndEdit.AddListener(ChangeSpeed);
         
         distanceInput.text = distance.ToString();
         distanceInput.onEndEdit.AddListener(ChangeDistance); 
