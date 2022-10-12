@@ -44,9 +44,9 @@ public class CanvasController : MonoBehaviour
 
     private void ChangeTimer(string arg)
     {
-        if (float.Parse(arg) > 0)
+        if (float.Parse(arg, CultureInfo.GetCultureInfo("en-US"))> 0)
         {
-            timer = float.Parse(arg);
+            timer = float.Parse(arg, CultureInfo.GetCultureInfo("en-US"));
         }
         else
         {
@@ -57,9 +57,9 @@ public class CanvasController : MonoBehaviour
 
     private void ChangeDistance(string arg)
     {
-        if(distanceLimit > float.Parse(arg))
+        if(distanceLimit > float.Parse(arg, CultureInfo.GetCultureInfo("en-US")))
         {
-           distance= float.Parse(arg);
+           distance= float.Parse(arg, CultureInfo.GetCultureInfo("en-US"));
         }
         else
         {
@@ -71,9 +71,9 @@ public class CanvasController : MonoBehaviour
 
     private void ChangeSpeed(string arg)
     {
-        if (float.Parse(arg) > 0)
+        if (float.Parse(arg, CultureInfo.GetCultureInfo("en-US") )> 0)
         {
-            speed = float.Parse(arg);
+            speed = float.Parse(arg, CultureInfo.GetCultureInfo("en-US"));
         }
         else
         {
