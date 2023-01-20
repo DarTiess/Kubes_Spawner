@@ -90,8 +90,6 @@ public class CubesGenerator : MonoBehaviour
     {
         for(int i = 0; i < listSize; i++)
         {
-           
-          
             switch (downloadType)
             {
                 case DownloadType.FromPrefabs: 
@@ -107,16 +105,13 @@ public class CubesGenerator : MonoBehaviour
 
             }
            
-           
-          
-           
         }
     }
    private IEnumerator DownloadAssetBundlesFromServer()
     {
         GameObject obj= null;
 
-        string url="https://drive.google.com/u/0/uc?id=1s5gPWKMsfpCM_1iFg_9ATzF-pCGfxk_9&export=download";
+        string url="https://drive.google.com/u/0/uc?id=1itiMfzCl-W5jiFK6H0p48ImomYRNbEwR&export=download";
 
         using(UnityWebRequest www= UnityWebRequestAssetBundle.GetAssetBundle(url))
         {
@@ -127,16 +122,18 @@ public class CubesGenerator : MonoBehaviour
             }
             else
             {
+               
                 AssetBundle bundle= DownloadHandlerAssetBundle.GetContent(www);
-                obj=bundle.LoadAsset(bundle.GetAllAssetNames()[0]) as GameObject;
+                 int rnd= UnityEngine.Random.Range(0,bundle.GetAllAssetNames().Length);
+                obj=bundle.LoadAsset(bundle.GetAllAssetNames()[rnd]) as GameObject;
                 bundle.Unload(false);
 
                 yield return new WaitForEndOfFrame();
             }
             www.Dispose();
         }
+        yield return new WaitForSeconds(1f);
         InstantiateGameObjectFromAssets(obj);
-
     }
 
     private void InstantiateGameObjectFromAssets(GameObject obj)
