@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class CubesController : MonoBehaviour
 {
 
@@ -34,11 +35,17 @@ public class CubesController : MonoBehaviour
     }
     private void Move()
     {
+        if (navMesh == null)
+        {
+            navMesh = GetComponent<NavMeshAgent>();
+          
+        }
         navMesh.SetDestination(destPosition);
         if (Vector3.Distance(transform.position, destPosition) < stopDistance)
         {
-         StopMove();
+            StopMove();
         }
+     
     }
     void StopMove()
     {

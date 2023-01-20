@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 1929468202
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: myasstesbundlescubes
+      Dependencies: {}
+    Info_1:
+      Name: myassetbundpref
+      Dependencies: {}
