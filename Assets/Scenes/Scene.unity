@@ -1555,10 +1555,10 @@ MonoBehaviour:
   - {fileID: 7935628413983413426, guid: 282d9a9890322b5408d069446d816b92, type: 3}
   - {fileID: 6937328036827162585, guid: 6b42b882c8b1e884bada189ba52777cd, type: 3}
   listSize: 10
-  generateTimer: 1
+  generateTimer: 1.02
   roadWidth: 10
   distanceLimit: {fileID: 1457602102}
-  destination: 15
+  destination: 50
   speed: 5
   stopDistance: 1
   _keysList:

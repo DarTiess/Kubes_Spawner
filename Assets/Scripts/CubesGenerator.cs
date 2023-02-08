@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 enum DownloadType
 {
@@ -18,35 +19,30 @@ public class CubesGenerator : MonoBehaviour
     [Header("Push Settings")]
     [SerializeField] private DownloadType downloadType;
     [SerializeField] private List<GameObject> cubesPrefabs;
-
     [SerializeField] private int listSize;
-    private List<GameObject> cubesList = new List<GameObject>();
-
     [SerializeField] private float generateTimer;
-    [HideInInspector] public float timerValue { get { return generateTimer; } }
-    float timer = 0;
     [SerializeField] private float roadWidth;
-    float roadPart;
-
     [SerializeField] private Transform distanceLimit;
-    float distLimit;
-    [HideInInspector] public float distLimitValue { get { return distLimit = Vector3.Distance(transform.position, distanceLimit.position); } }
-
-
     [Header("Cube's Settings")]
     [SerializeField] private float destination;
-    [HideInInspector] public float distValue { get { return destination; } }
-
-
     [SerializeField] private float speed;
-    [HideInInspector] public float speedValue { get { return speed; } }
     [SerializeField] private float stopDistance;
+    [Header("Adressables key")]
+    [SerializeField] private List<string> _keysList;
+
+    float timer = 0;
+    float roadPart;
+    float distLimit;
     float rndXpos;
     int rndCube;
-    [Header("Adressables key")]
-    [SerializeField]private List<string> _keysList;
-  
-   
+    private List<GameObject> cubesList = new List<GameObject>();
+    List<AsyncOperationHandle> _handlers = new List<AsyncOperationHandle>();
+
+    [HideInInspector] public float timerValue { get { return generateTimer; } }
+    [HideInInspector] public float distLimitValue { get { return distLimit = Vector3.Distance(transform.position, distanceLimit.position); } }
+    [HideInInspector] public float distValue { get { return destination; } }
+    [HideInInspector] public float speedValue { get { return speed; } }
+
     private void Start()
     {
         roadPart = roadWidth / 2;
@@ -81,12 +77,13 @@ public class CubesGenerator : MonoBehaviour
                 cubesList[i].transform.position = new Vector3(transform.position.x - rndXpos, transform.position.y, transform.position.z);
                 cubesList[i].GetComponent<CubesController>().InitCubeSettings(destination, speed, stopDistance);
                 cubesList[i].SetActive(true);
+               timer = 0; 
                 return;
             }
         }
 
-
-        timer = 0;
+          timer = 0; 
+       
         return;
     }
 
@@ -113,16 +110,25 @@ public class CubesGenerator : MonoBehaviour
 
         }
     }
-
+ 
     public async void LoadPrefabsFromAdressables()
     {
          rndCube = UnityEngine.Random.Range(0, _keysList.Count);
-        var loadAssync= Addressables.LoadAssetAsync<GameObject>(_keysList[rndCube]);
+        var loadAssync=Addressables.LoadAssetAsync<GameObject>(_keysList[rndCube]);
+       _handlers.Add(loadAssync);
       
                  
         await loadAssync.Task;
             InstantiateGameObjectFromAssets(loadAssync.Result);           
 
+    }
+
+    private void OnDisable()
+    {
+        foreach (var handler in _handlers)
+        {
+            Addressables.Release(handler);
+        }
     }
     private IEnumerator DownloadAssetBundlesFromServer()
     {
