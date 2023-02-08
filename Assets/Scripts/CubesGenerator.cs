@@ -110,16 +110,21 @@ public class CubesGenerator : MonoBehaviour
 
         }
     }
- 
-    public async void LoadPrefabsFromAdressables()
+
+    public void LoadPrefabsFromAdressables()
     {
-         rndCube = UnityEngine.Random.Range(0, _keysList.Count);
-        var loadAssync=Addressables.LoadAssetAsync<GameObject>(_keysList[rndCube]);
-       _handlers.Add(loadAssync);
-      
-                 
-        await loadAssync.Task;
-            InstantiateGameObjectFromAssets(loadAssync.Result);           
+        rndCube = UnityEngine.Random.Range(0, _keysList.Count);
+        Addressables.LoadAssetAsync<GameObject>(_keysList[rndCube]).Completed += (loadAssynHandler) =>
+        {
+            if (loadAssynHandler.Status == AsyncOperationStatus.Succeeded)
+            {
+                _handlers.Add(loadAssynHandler);
+                InstantiateGameObjectFromAssets(loadAssynHandler.Result);
+            }
+
+        };
+        // await loadAssync.Task;
+
 
     }
 
